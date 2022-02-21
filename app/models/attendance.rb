@@ -3,5 +3,5 @@
 class Attendance < ApplicationRecord
   belongs_to :occurrence
   belongs_to :person
-  belongs_to :role
+  belongs_to :role, optional: true
 end
