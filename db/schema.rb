@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_21_114938) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_21_115304) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attendances", force: :cascade do |t|
+    t.bigint "occurrence_id", null: false
+    t.bigint "person_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["occurrence_id"], name: "index_attendances_on_occurrence_id"
+    t.index ["person_id"], name: "index_attendances_on_person_id"
+  end
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.bigint "resource_owner_id", null: false
@@ -65,6 +74,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_21_114938) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "people", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
@@ -73,6 +88,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_21_114938) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "attendances", "occurrences"
+  add_foreign_key "attendances", "people"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
 end
